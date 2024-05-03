@@ -9,6 +9,7 @@ const app = require("../app");
 const db = require("../db");
 
 let invoicesData;
+let companyData;
 
 beforeEach(async function () {
   let company = await db.query(`
@@ -69,12 +70,14 @@ describe("GET /invoices", function () {
       ],
     });
   });
-  test("Responds for 404 for invalid code", async function () {
+  test("Responds for 404 for invalid id", async function () {
     const response = await request(app).get(`/invoices/999`);
     expect(response.statusCode).toEqual(404);
   });
   test("Gets a invoice base on company", async function () {
-    const response = await request(app).get(`/invoices/companies/apple`);
+    const response = await request(app).get(
+      `/invoices/companies/${companyData.code}`
+    );
     const expectedAddDate = new Date(invoicesData.add_date).toISOString();
     expect(response.statusCode).toEqual(200);
     expect(response.body).toEqual({
@@ -94,6 +97,10 @@ describe("GET /invoices", function () {
         ],
       },
     });
+  });
+  test("Responds for 404 for invalid code", async function () {
+    const response = await request(app).get(`/invoices/companies/nothing`);
+    expect(response.statusCode).toEqual(404);
   });
 });
 
@@ -139,7 +146,7 @@ describe("PATCH /invoices", function () {
     //   },
     // });
   });
-  test("Responds for 404 for invalid code", async function () {
+  test("Responds for 404 for invalid id", async function () {
     const response = await request(app).patch(`/invoices/999`).send({
       comp_code: "ibm",
       amt: 1000,

@@ -99,8 +99,8 @@ router.get("/companies/:code", async (req, res, next) => {
        WHERE code=$1`,
       [code]
     );
-    console.log(companyResult);
-    if (companyResult.length === 0) {
+    // console.log(companyResult.rows);
+    if (companyResult.rows.length === 0) {
       return next(new ExpressError("No company found", 404));
     }
     const invoicesResult = await db.query(
