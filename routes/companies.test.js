@@ -39,7 +39,12 @@ describe("GET /companies", function () {
     const response = await request(app).get(`/companies/${companiesData.code}`);
     expect(response.statusCode).toEqual(200);
     expect(response.body).toEqual({
-      company: [companiesData],
+      company: {
+        code: companiesData.code,
+        name: companiesData.name,
+        description: companiesData.description,
+        industry: ["no industry"],
+      },
     });
   });
   test("Responds for 404 for invalid code", async function () {
