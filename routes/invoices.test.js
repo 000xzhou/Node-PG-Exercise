@@ -73,6 +73,23 @@ describe("GET /invoices", function () {
     const response = await request(app).get(`/invoices/999`);
     expect(response.statusCode).toEqual(404);
   });
+  test("Gets a invoice base on company", async function () {
+    const response = await request(app).get(`/invoices/companies/apple`);
+    const expectedAddDate = new Date(invoicesData.add_date).toISOString();
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toEqual({
+      company: [
+        {
+          id: invoicesData.id,
+          comp_code: invoicesData.comp_code,
+          amt: invoicesData.amt,
+          paid: invoicesData.paid,
+          add_date: expectedAddDate,
+          paid_date: invoicesData.paid_date,
+        },
+      ],
+    });
+  });
 });
 
 /** POST /invoices */
