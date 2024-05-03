@@ -17,7 +17,7 @@ beforeEach(async function () {
   companyData = company.rows[0];
   let result = await db.query(`
     INSERT INTO
-      invoices (comp_code, amt) VALUES ('${company.code}', 100)
+      invoices (comp_code, amt) VALUES ('${companyData.code}', 100)
       RETURNING *`);
   invoicesData = result.rows[0];
 });

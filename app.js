@@ -9,9 +9,11 @@ app.use(express.json());
 
 const companiesRoute = require("./routes/companies");
 const invoicesRoute = require("./routes/invoices");
+const industryRoute = require("./routes/industry");
 
 app.use("/companies", companiesRoute);
 app.use("/invoices", invoicesRoute);
+app.use("/industry", industryRoute);
 
 /** 404 handler */
 

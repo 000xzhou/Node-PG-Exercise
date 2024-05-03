@@ -6,8 +6,6 @@ const ExpressError = require("../expressError");
 // GET all companies
 router.get("/", async (req, res, next) => {
   try {
-    const type = req.query.type;
-
     const results = await db.query(
       `SELECT *
        FROM companies`
