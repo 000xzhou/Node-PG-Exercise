@@ -11,9 +11,9 @@ const db = require("../db");
 let invoicesData;
 
 beforeEach(async function () {
-  let comapny = await db.query(`
+  let company = await db.query(`
     INSERT INTO companies (code, name, description) VALUES ('apple', 'apple', 'apple') RETURNING *`);
-
+  companyData = company.rows[0];
   let result = await db.query(`
     INSERT INTO
       invoices (comp_code, amt) VALUES ('apple', 100)
@@ -78,16 +78,21 @@ describe("GET /invoices", function () {
     const expectedAddDate = new Date(invoicesData.add_date).toISOString();
     expect(response.statusCode).toEqual(200);
     expect(response.body).toEqual({
-      company: [
-        {
-          id: invoicesData.id,
-          comp_code: invoicesData.comp_code,
-          amt: invoicesData.amt,
-          paid: invoicesData.paid,
-          add_date: expectedAddDate,
-          paid_date: invoicesData.paid_date,
-        },
-      ],
+      company: {
+        code: companyData.code,
+        name: companyData.name,
+        description: companyData.description,
+        invoice: [
+          {
+            id: invoicesData.id,
+            comp_code: invoicesData.comp_code,
+            amt: invoicesData.amt,
+            paid: invoicesData.paid,
+            add_date: expectedAddDate,
+            paid_date: invoicesData.paid_date,
+          },
+        ],
+      },
     });
   });
 });
